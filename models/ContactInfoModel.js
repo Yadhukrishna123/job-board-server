@@ -1,8 +1,7 @@
 const mongoose = require("mongoose")
 
-
-const contactInfoSchema = new mongoose.Schema({
-    First_name:{
+const ContactInfoSchema = new mongoose.Schema({
+    first_name:{
         type:String,
         require:true,
     },
@@ -20,7 +19,7 @@ const contactInfoSchema = new mongoose.Schema({
     },
     city:{
         type:String,
-        require:true,  
+        require:true,
     },
     address:{
         type:String,
@@ -30,10 +29,11 @@ const contactInfoSchema = new mongoose.Schema({
         type:String,
         require:true,
     },
-    cv:{
+    resume:{
         type:String,
         require:true,
     }
+
 })
 
-module.exports = mongoose.model("Contact Info",contactInfoSchema)
+module.exports = mongoose.model("Contact information",ContactInfoSchema)

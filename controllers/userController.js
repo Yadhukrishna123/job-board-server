@@ -195,18 +195,15 @@ exports.deleteAcc =async (req,res)=>{
     }
 }
 
-
-
-
 exports.newJob =async (req,res)=>{
-    const {title,description, company_name,  experience,  qualification, salary,location,} = req.body;
+    const {title,description,companyName,expeRiance,qualification, salary,location,} = req.body;
 
     try {
         const newjob = await newJob.create({
             title,
             description,
-            company_name,
-            experience,
+            companyName,
+            expeRiance,
             qualification,
             salary,
             location,
@@ -230,9 +227,114 @@ exports.newJob =async (req,res)=>{
     }
 }
 
+exports.getJob =async (req,res)=>{
+    try {
+        const jobs =await newJob.find();
+        if(!jobs){
+            return res.status(404).json({   
+                success:false,
+                message:"Jobb not found"
+            })
+        }
+        res.status(200).json({
+            success:true,
+            jobs
+        })
+    } catch (error) {
+        res.status(500).json({
+            success:false,
+            message:error.message
+        })
+    }
+}
+
+exports.deleteJob = async (req,res)=>{
+
+    const {id} = req.params;
     
+    try {
+        const job = await newJob.findByIdAndDelete(id)
+        if(!job){
+            return res.status(404).json({
+                success:false,
+                message:"job not found"
+            })
+        }
+        res.status(200).json({
+            success:true,
+             message:"job delete successsfully"
+            
+        })
+    } catch (error) {
+        res.status(500).json({
+            success:false,
+            message:error.message
+        })
+    }
+}
+
+exports.getJobs =async   (req,res)=>{
+
+    const {id}=req.params
+
+  try {
+    const job = await newJob.findById(id);
+    if(!job){
+        return res.status(404).json({
+            success:false,
+            message:"Job not found"
+
+        })
+    }
+    res.status(200).json({
+        success:true,
+        job
+
+    })
+  } catch (error) {
+    res.status(500).json({
+        success:false,
+        message:error.message
+    })
+  }
+    
+    
+}
+
+exports.updateJobs = async (req,res)=>{
+    const {id} = req.params
+
+    const  {title,companyNname, salary,location} = req.body
+
+    try {
+        const job =  await newJob.findById(id)
+        if(!job){
+            return res.status(404).json({
+                success:false,
+                message:"job not found"
+            })
+        }
+        job.title = title,
+        job.companyNname = companyNname,
+        job.salary = salary,
+        job.location = location
+
+        job.save();
+
+        res.status(200).json({
+            success:true,
+            job,
+            message:"Successfully Updated"
+        })
+    } catch (error) {
+        res.status(500).json({
+            success:false,
+            message:error.message
+        })
+    }
+}
         
-  
+
 
 
 

@@ -1,11 +1,40 @@
-const contact = require("../models/coModel")
+const contact = require("../models/ContactInfoModel")
 
-exports.contactInfo = (req,res)=>{
-    const {first_name, last_name, email, state, city,  address, phone_number} = req.body;
+exports.contactInfo =async (req,res)=>{
+    const { first_name, last_name,  email, state, city, address, phone_number} = req.body;
+     
+    const resume = req.file.path
 
-    const cv= req.file;
-    
-    console.log(cv);
+    console.log(resume);
 
-    res.send("DONE")
+    try {
+        const contacts = await contact.create({
+            first_name,
+            last_name,
+            email,
+            state,
+            city,
+            address,
+            phone_number,
+            resume
+        })
+        if(!contacts){
+            return res.status(501).json({
+                success:false,
+                message:"faild to submit"
+            })
+        }
+        res.status(201).json({
+            success:true,
+            message:"successfully Upplyed",
+            contacts
+        })
+    } catch (error) {
+        res.status(500).json({
+            success:false,
+            message:error.message
+        })
+    }
+
+   
 }
